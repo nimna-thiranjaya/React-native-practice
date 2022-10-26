@@ -7,16 +7,20 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/core";
 import { auth } from "../firebase/firebase.config";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigation = useNavigation();
 
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -33,7 +37,18 @@ export default function LoginScreen() {
   };
 
   const handleLogin = () => {
-    console.log("Login");
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        Alert.alert("User logged in successfully");
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        Alert.alert(errorMessage);
+      });
   };
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -63,6 +78,14 @@ export default function LoginScreen() {
           style={[styles.button, styles.buttonOutliner]}
         >
           <Text style={styles.buttonOutlineText}>Register</Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <TouchableOpacity
+          style={styles.forgetPbtn}
+          onPress={() => navigation.navigate("ForgetPassword")}
+        >
+          <Text>Forget Password</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -113,5 +136,9 @@ const styles = StyleSheet.create({
     color: "green",
     fontWeight: "700",
     fontSize: 16,
+  },
+
+  forgetPbtn: {
+    marginTop: 20,
   },
 });

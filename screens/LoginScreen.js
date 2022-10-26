@@ -19,6 +19,8 @@ import {
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [userName, setuserName] = useState("");
 
   const navigation = useNavigation();
 
@@ -54,6 +56,19 @@ export default function LoginScreen() {
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.inputContainer}>
         <TextInput
+          placeholder="Name"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          style={styles.input}
+        />
+
+        <TextInput
+          placeholder="Username"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          style={styles.input}
+        />
+        <TextInput
           placeholder="Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
@@ -83,7 +98,7 @@ export default function LoginScreen() {
       <View>
         <TouchableOpacity
           style={styles.forgetPbtn}
-          onPress={() => navigation.navigate("ForgetPassword")}
+          onPress={() => navigation.navigate("Forget Password")}
         >
           <Text>Forget Password</Text>
         </TouchableOpacity>

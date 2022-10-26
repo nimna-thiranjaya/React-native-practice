@@ -8,9 +8,24 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-
+import { auth } from "../firebase/firebase.config";
+import { sendPasswordResetEmail } from "firebase/auth";
 export default function ForgetPassword() {
-  const [email, setEmail] = useState(second);
+  const [email, setEmail] = useState("");
+
+  const ResetPassword = () => {
+    try {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          Alert.alert("Password reset email sent!");
+        })
+        .catch((error) => {
+          Alert.alert(error.message);
+        });
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.inputContainer}>
@@ -23,12 +38,8 @@ export default function ForgetPassword() {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity
-          //   onPress={handleSignUp}
+          onPress={ResetPassword}
           style={[styles.button, styles.buttonOutliner]}
         >
           <Text style={styles.buttonOutlineText}>Forget Password</Text>
